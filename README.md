@@ -11,9 +11,9 @@ All permutations are generated with common attributes appended/prepended (such a
 
 Users can extend the attributes and separators using comma delimited lists of characters.
 
-Spraygen also accepts single words or external wordlists that allow you to generate tuned custom wordlists as well.
+Spraygen also accepts single words or external wordlists that allow you to generate tuned custom wordlists in addition to what is already provided.
 
-You could use tools like crunch, a fancy bashloop over SecLists, or whatever have you but that takes time...this one is made for spraying, so get to it!
+You could use tools like crunch, a fancy bash loop over SecLists, or whatever have you but that takes time...this one is made for spraying, so get to it!
 
 
 ```
