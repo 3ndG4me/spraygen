@@ -3,6 +3,12 @@
 import argparse
 from datetime import datetime
 from colorama import init, Fore, Back, Style
+import itertools
+import string
+import time
+
+# Global start time to keep track of process running time
+start_time = time.time()
 
 # Colorama init call
 init()
@@ -271,10 +277,17 @@ password_permutations = [
     "P4$$w0rd"
 ]
 
+# Global keyspace for random strings
+ascii_keyspace = string.ascii_letters
+numeral_keyspace = string.digits
+special_keyspace = string.punctuation
+ascii_numeral_keyspace = ascii_keyspace + numeral_keyspace
+numeral_special_keyspace = numeral_keyspace + special_keyspace
+ascii_special_keyspace = ascii_keyspace + special_keyspace
+full_keyspace = ascii_numeral_keyspace + special_keyspace
 
 # Global year list to keep track of and manipulate year permutations
 year_list = []
-
 
 # Global sports scores list to keep track of and manipulate sports score permutations
 sports_scores_list = []
@@ -289,8 +302,57 @@ attr_sep_list = []
 # Global custom list to keep track of and manipulate and user supplied custom words
 custom_wordlist = []
 
+
+class DeDupedList(list):
+    def __init__(self):
+        self.list = self
+    
+    def append(self, item):
+        if item in self.list:
+            # current item exists so just return and do not duplicate
+            return
+        list.append(self, item)
+
 # Global spray list, this is the final password list everything is appended to
-spray_list = []
+spray_list = DeDupedList()
+
+def generate_keyspace_list(mode, size, year_start, year_end):
+    if mode == "ascii":
+        ascii_items = itertools.product(ascii_keyspace, repeat=size)
+        for item in ascii_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "num":
+        num_items = itertools.product(numeral_keyspace, repeat=size)
+        for item in num_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "spec":
+        spec_items = itertools.product(special_keyspace, repeat=size)
+        for item in spec_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "asciinum":
+        asciinum_items = itertools.product(ascii_numeral_keyspace, repeat=size)
+        for item in asciinum_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "asciispec":
+        asciispec_items = itertools.product(ascii_special_keyspace, repeat=size)
+        for item in asciispec_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "numspec":
+        numspec_items = itertools.product(numeral_special_keyspace, repeat=size)
+        for item in numspec_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+    elif mode == "full":
+        full_items = itertools.product(full_keyspace, repeat=size)
+        for item in full_items:
+            spray_list.append(str(item))
+            generate_years(str(item), year_start, year_end)
+
 
 def generate_custom(year_start, year_end):
     for word in custom_wordlist:
@@ -298,7 +360,7 @@ def generate_custom(year_start, year_end):
         spray_list.append(word)
         spray_list.append(word.upper())
         spray_list.append(word.lower())
-        # Get year permutation with base month
+        # Get year permutation with base custom word
         generate_years(word, year_start, year_end)
 
 
@@ -308,7 +370,7 @@ def generate_password_perms(year_start, year_end):
         spray_list.append(password)
         spray_list.append(password.upper())
         spray_list.append(password.lower())
-        # Get year permutation with base month
+        # Get year permutation with base password permutation
         generate_years(password, year_start, year_end)
 
 def generate_months(year_start, year_end):
@@ -331,7 +393,7 @@ def generate_nfl(year_start, year_end):
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
-        # Get year permutation with base month
+        # Get year permutation with base nfl team
         generate_years(team, year_start, year_end)
 
 
@@ -345,7 +407,7 @@ def generate_nba(year_start, year_end):
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
-        # Get year permutation with base month
+        # Get year permutation with base nba team
         generate_years(team, year_start, year_end)
 
 def generate_mlb(year_start, year_end):
@@ -358,7 +420,7 @@ def generate_mlb(year_start, year_end):
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
-        # Get year permutation with base month
+        # Get year permutation with base mlb team
         generate_years(team, year_start, year_end)
 
 def generate_nhl(year_start, year_end):
@@ -371,7 +433,7 @@ def generate_nhl(year_start, year_end):
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
-        # Get year permutation with base month
+        # Get year permutation with base nhl team
         generate_years(team, year_start, year_end)
 
 def generate_seasons(year_start, year_end):
@@ -381,7 +443,7 @@ def generate_seasons(year_start, year_end):
         spray_list.append(season.upper())
         spray_list.append(season.lower())
 
-        # Get year permutation with base month
+        # Get year permutation with base season
         generate_years(season, year_start, year_end)
 
 def generate_years(item, year_start, year_end):
@@ -668,7 +730,9 @@ def main():
     parser.add_argument('-w', metavar='wordlist', help="path to a custom wordlist", type=str)
     parser.add_argument('-n', metavar='single word', help="single custom word to generate a custom wordlist with", type=str)
     parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, or plain.", choices=['all', 'nosep', 'noattr', 'plain'], default="all", type=str)
-    parser.add_argument('--type', help="Type of list to generate. Can be all, sports, months, seasons, password, or custom", choices=['all', 'sports', 'months', 'seasons', 'password', 'custom'], default="all", type=str)
+    parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, or custom. Choosing 'all' executes all options except for 'iterative' which much be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'custom'], default="all", type=str)
+    parser.add_argument('--iter', help="Keyspace mode for iterative list generation. Only works when --type is set to 'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will generate all permutations of the selected keyspace with a given length set with the --size parameter.", choices=['ascii', 'num', 'spec', 'asciinum', 'asciispec', 'numspec', 'full'], default="full", type=str)
+    parser.add_argument('--size', help="Length of passwords generated by a set keyspace. Only works when --type is set to 'iterative' and an --iter keyspace mode is set.", default="4", type=int)
     parser.add_argument('-o', metavar='output file', help="name of a file to create and write the final output to", type=str)
     parser.add_argument('-p', metavar='plaintext output', action=argparse.BooleanOptionalAction, help="prints the output line by line as plaintext", type=str)
 
@@ -687,18 +751,18 @@ def main():
         temp_list = args.s.split(",")
         for sep in temp_list:
             common_separators.append(sep)
-
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom separators added in %s seconds ---" % (time.time() - start_time))
     if args.a != None:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding custom attributes to list...")
         temp_list = args.a.split(",")
         for attr in temp_list:
             attributes.append(attr)
-
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom attributes added in %s seconds ---" % (time.time() - start_time))
     if args.w != None:
         customFile = open(args.w, "r")
         for item in customFile:
             custom_wordlist.append(item)
-
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom wordlist loaded in %s seconds ---" % (time.time() - start_time))
     if args.n != None:
         custom_wordlist.append(args.n)
         
@@ -724,22 +788,55 @@ def main():
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating MONTHS list...")
             generate_months(args.year_start, args.year_end)
             generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated months in %s seconds ---" % (time.time() - start_time))
+        elif args.type == "iterative":
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating ITERATIVE list...")
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "List size will be: " + str(args.size))
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "List keyspace will be: " + args.iter)
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "This is generating literally every permutation in that keyspace, this will take some time...")
+            generate_keyspace_list(args.iter, args.size, args.year_start, args.year_end)
+            generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated iterative in %s seconds ---" % (time.time() - start_time))
         elif args.type == "sports":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating SPORTS list...")
-            generate_sports(args.year_start, year_end)
+            generate_sports(args.year_start, args.year_end)
             generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated sports in %s seconds ---" % (time.time() - start_time))
+        elif args.type == "nfl":
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NFL list...")
+            generate_nfl(args.year_start, args.year_end)
+            generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nfl in %s seconds ---" % (time.time() - start_time))
+        elif args.type == "nba":
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NBA list...")
+            generate_nba(args.year_start, args.year_end)
+            generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nba in %s seconds ---" % (time.time() - start_time))
+        elif args.type == "mlb":
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating MLB list...")
+            generate_mlb(args.year_start, args.year_end)
+            generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated mlb in %s seconds ---" % (time.time() - start_time))
+        elif args.type == "nhl":
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NHL list...")
+            generate_nhl(args.year_start, args.year_end)
+            generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nhl in %s seconds ---" % (time.time() - start_time))
         elif args.type == "seasons":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating SEASONS list...")
             generate_seasons(args.year_start, args.year_end)
             generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated seasons in %s seconds ---" % (time.time() - start_time))
         elif args.type == "password":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating PASSWORD list...")
             generate_password_perms(args.year_start, args.year_end)
             generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated 'password' in %s seconds ---" % (time.time() - start_time))
         elif args.type == "custom":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating CUSTOM list...")
             generate_custom(args.year_start, args.year_end)
             generate_year_list_permutations()
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated custom in %s seconds ---" % (time.time() - start_time))
     else:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating ALL list...(If a custom wordlist is specified it will be used)")
         generate_all(args.year_start, args.year_end)
@@ -747,16 +844,19 @@ def main():
 
     if isNotSep == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating separators...")
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- separators generated in %s seconds ---" % (time.time() - start_time))
         gen_separators(args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
             gen_sports_separators(args.year_start, args.year_end)
     if isNoAttr == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes...")
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attributes generated in %s seconds ---" % (time.time() - start_time))
         gen_attributes(args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
             gen_sports_attributes(args.year_start, args.year_end)
     if isNotSep == False and isNoAttr == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes + separators...")
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attribute + separators generated in %s seconds ---" % (time.time() - start_time))
         gen_attrs_separtors(args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
             gen_sports_attrs_separators(args.year_start, args.year_end)
@@ -767,7 +867,7 @@ def main():
     combine_attrs_separators()
     generate_year_list_permutations()
 
-
+    print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- initial list built in %s seconds ---" % (time.time() - start_time))
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Bulding final list!")
 
     if args.o != None:
@@ -781,7 +881,7 @@ def main():
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Printing final list:")
         for password in spray_list:
             print(password)
-
+    print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- finished in %s seconds ---" % (time.time() - start_time))
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Done!")
 
 try:
