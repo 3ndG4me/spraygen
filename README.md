@@ -5,7 +5,7 @@ Password list generator for password spraying - prebaked with goodies
   <img width=400px src="resources/spraygenlogo.png" />
 </p>
 
-Generates permutations of Months, Seasons, Years, Sports Teams (NFL, NBA, MLB, NHL), Sports Scores, "Password".
+Generates permutations of Months, Seasons, Years, Sports Teams (NFL, NBA, MLB, NHL), Sports Scores, "Password", and even Iterable Keyspaces of a specified size.
 
 All permutations are generated with common attributes appended/prepended (such as "!" or "#"), or custom separators (such as "." or "_").
 
