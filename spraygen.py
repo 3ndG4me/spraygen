@@ -8,6 +8,7 @@ import string
 import time
 from progress.bar import Bar
 import threading
+import random
 
 # Global start time to keep track of process running time
 start_time = time.time()
@@ -17,6 +18,7 @@ init()
 
 # Globals for separators and attribute toggles
 isPlain = False
+isYears = True
 isNotSep = False
 isNoAttr = False
 
@@ -327,59 +329,59 @@ def update_spray_list(item):
 
 def generate_keyspace_list(mode, size, year_start, year_end):
     if mode == "ascii":
-        ascii_items = itertools.product(ascii_keyspace, repeat=size)
+        ascii_items = list(itertools.product(ascii_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(ascii_items))
         for item in ascii_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "num":
-        num_items = itertools.product(numeral_keyspace, repeat=size)
+        num_items = list(itertools.product(numeral_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(num_items))
         for item in num_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "spec":
-        spec_items = itertools.product(special_keyspace, repeat=size)
+        spec_items = list(itertools.product(special_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(spec_items))
         for item in spec_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "asciinum":
-        asciinum_items = itertools.product(ascii_numeral_keyspace, repeat=size)
+        asciinum_items = list(itertools.product(ascii_numeral_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(asciinum_items))
         for item in asciinum_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "asciispec":
-        asciispec_items = itertools.product(ascii_special_keyspace, repeat=size)
+        asciispec_items = list(itertools.product(ascii_special_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(asciispec_items))
         for item in asciispec_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "numspec":
-        numspec_items = itertools.product(numeral_special_keyspace, repeat=size)
+        numspec_items = list(itertools.product(numeral_special_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(numspec_items))
         for item in numspec_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
     elif mode == "full":
-        full_items = itertools.product(full_keyspace, repeat=size)
+        full_items = list(itertools.product(full_keyspace, repeat=size))
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(numspec_items))
         for item in full_items:
-            update_spray_list(str(item))
-            generate_years(str(item), year_start, year_end)
+            update_spray_list(''.join(item))
+            generate_years(''.join(item), year_start, year_end)
             bar.next()
         bar.finish()
 
@@ -500,38 +502,42 @@ def generate_seasons(year_start, year_end):
     bar.finish()
 
 def generate_years(item, year_start, year_end):
-    for year in range(year_start, year_end+1):
-        # Get basic year concat
-        new_item = item + str(year)
-        year_list.append(new_item)
-        year_list.append(new_item.lower())
-        year_list.append(new_item.upper())
+    
+    if isYears:
 
-        # Prepend year permutation
-        new_item = str(year) + item
-        year_list.append(new_item.lower())
-        year_list.append(new_item.upper())
-        year_list.append(new_item)
+        for year in range(year_start, year_end+1):
+            # Get basic year concat
+            new_item = item + str(year)
+            year_list.append(new_item)
+            year_list.append(new_item.lower())
+            year_list.append(new_item.upper())
 
-        # Cut year concat
-        new_item = item + str(year)[-2:]
-        year_list.append(new_item.lower())
-        year_list.append(new_item.upper())
-        year_list.append(new_item)
+            # Prepend year permutation
+            new_item = str(year) + item
+            year_list.append(new_item.lower())
+            year_list.append(new_item.upper())
+            year_list.append(new_item)
 
-        # Prepend cut year concat
-        new_item = str(year)[-2:] + item
-        year_list.append(new_item.lower())
-        year_list.append(new_item.upper())
-        year_list.append(new_item)
+            # Cut year concat
+            new_item = item + str(year)[-2:]
+            year_list.append(new_item.lower())
+            year_list.append(new_item.upper())
+            year_list.append(new_item)
+
+            # Prepend cut year concat
+            new_item = str(year)[-2:] + item
+            year_list.append(new_item.lower())
+            year_list.append(new_item.upper())
+            year_list.append(new_item)
 
 def generate_year_list_permutations():
-    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding year permutations to final list", suffix='%(percent)d%%', max=len(year_list))
-    for item in year_list:
-        # Add base word to list
-        update_spray_list(item)
-        bar.next()
-    bar.finish()
+    if isYears:
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding year permutations to final list", suffix='%(percent)d%%', max=len(year_list))
+        for item in year_list:
+            # Add base word to list
+            update_spray_list(item)
+            bar.next()
+        bar.finish()
 
 def gen_sports_separators(list_mode, sport, year_start, year_end):
     bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating separators list for sports scores", suffix='%(percent)d%%', max=len(sports_scores_list))
@@ -986,7 +992,7 @@ def main():
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.1
+    Version 1.2
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
@@ -998,18 +1004,19 @@ def main():
     parser.add_argument('-a', metavar='attributes', help="a comma delimited list of one or more attributes", type=str)
     parser.add_argument('-w', metavar='wordlist', help="path to a custom wordlist", type=str)
     parser.add_argument('-n', metavar='single word', help="single custom word to generate a custom wordlist with", type=str)
-    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, plain, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'plain', 'custom'], default="all", type=str)
+    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, only years, plain, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'years', 'plain', 'custom'], default="all", type=str)
     parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, or custom. Choosing 'all' executes all options except for 'iterative' which must be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'custom'], default="all", type=str)
     parser.add_argument('--iter', help="Keyspace mode for iterative list generation. Only works when --type is set to 'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will generate all permutations of the selected keyspace with a given length set with the --size parameter.", choices=['ascii', 'num', 'spec', 'asciinum', 'asciispec', 'numspec', 'full'], default="full", type=str)
     parser.add_argument('--size', help="Length of passwords generated by a set keyspace. Only works when --type is set to 'iterative' and an --iter keyspace mode is set.", default="4", type=int)
     parser.add_argument('-o', metavar='output file', help="name of a file to create and write the final output to", type=str)
     parser.add_argument('-p', metavar='plaintext output', action=argparse.BooleanOptionalAction, help="prints the output line by line as plaintext", type=str)
+    parser.add_argument('--sort', help="Sort final output. Sorting methods supported are nosort, asc, desc, random.", choices=['nosort', 'asc', 'desc', 'random'], default="nosort", type=str)
     parser.add_argument('-v', metavar='version output', action=argparse.BooleanOptionalAction, help="prints the current version of spraygen and exits", default=False, type=str)
 
     args = parser.parse_args()
 
     if args.v:
-        print("Spraygen Version: 1.1")
+        print("Spraygen Version: 1.2")
         return
 
     if args.year_start == None:
@@ -1072,11 +1079,13 @@ def main():
 
     if args.mode != "all":
         global isPlain
+        global isYears
         global isNotSep
         global isNoAttr
         if args.mode == "plain":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating PLAIN list...")
             isPlain = True
+            isYears = False
             isNotSep = True
             isNoAttr = True
         elif args.mode == "nosep":
@@ -1085,9 +1094,15 @@ def main():
         elif args.mode == "noattr":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NO ATTRIBUTE list...")
             isNoAttr = True
+        elif args.mode == "years":
+            isPlain = False
+            isYears = True
+            isNotSep = True
+            isNoAttr = True
         elif args.mode == "custom":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating CUSTOM SEPARATOR/ATTRIBUTE list...")
             isPlain = True
+            isYears = True
             isNotSep = True
             isNoAttr = True
 
@@ -1187,11 +1202,20 @@ def main():
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- initial list built in %s seconds ---" % (time.time() - start_time))
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Bulding final list!")
 
+    final_list = list(spray_list.values())
+    if args.sort == "asc":
+        final_list.sort()
+    elif args.sort == "desc":
+        final_list.sort(reverse=True)
+    elif args.sort == "random":
+        random.shuffle(final_list)
+
+
     if args.o != None:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Writing output to: " + args.o)
         f = open(args.o, "a")
-        bar = Bar(Fore.GREEN + "[*] Success: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(spray_list))
-        for password in spray_list.values():
+        bar = Bar(Fore.GREEN + "[*] Success: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(final_list))
+        for password in final_list:
             f.write(password + "\n")
             bar.next()
         f.close()
@@ -1199,7 +1223,7 @@ def main():
 
     if args.p == True:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Printing final list:")
-        for password in spray_list.values():
+        for password in final_list:
             print(password)
 
     print(Fore.GREEN + "\n[+] Success: " + Style.RESET_ALL +  "--- finished in %s seconds ---" % (time.time() - start_time))
