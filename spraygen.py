@@ -900,24 +900,21 @@ def gen_attrs_separators(list_mode, year_start, year_end):
     bar.finish()
 
 def combine_attrs_separators():
+    list_size = len(sep_list) + len(attr_list) + len(attr_sep_list)
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding relevant attribute/separator permutations to final list", max=list_size)
     if len(sep_list) > 0:
-        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding separator permutations to final list", max=len(sep_list))
         for sep in sep_list:
             spray_list.append(sep)
             bar.next()
-        bar.finish()
     if len(attr_list) > 0:
-        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding attribute permutations to final list", max=len(attr_list))
         for attr in attr_list:
             spray_list.append(attr)
             bar.next()
-        bar.finish()
     if len(attr_sep_list) > 0:
-        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding attribute + separator permutations to final list", max=len(attr_sep_list))
         for item in attr_sep_list:
             spray_list.append(item)
             bar.next()
-        bar.finish()
+    bar.finish()
 
 def add_separators(separator):
     common_separators.append(separator)
