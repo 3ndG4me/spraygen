@@ -1190,7 +1190,7 @@ def main():
             f.write(password + "\n")
             bar.next()
         f.close()
-        bar.finish
+        bar.finish()
 
     if args.p == True:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Printing final list:")
