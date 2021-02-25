@@ -999,7 +999,7 @@ def main():
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding custom separators to list...")
         temp_list = args.s.split(",")
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(temp_list))
-        if arg.type == "custom":
+        if args.type == "custom":
             for sep in temp_list:
                 custom_sep_list.append(sep)
                 bar.next()
@@ -1013,7 +1013,7 @@ def main():
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding custom attributes to list...")
         temp_list = args.a.split(",")
         bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(temp_list))
-        if arg.type == "custom":
+        if args.type == "custom":
             for attr in temp_list:
                 custom_attr_list.append(attr)
                 bar.next()
