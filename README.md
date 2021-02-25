@@ -63,7 +63,7 @@ optional arguments:
   --type {all,iterative,sports,nfl,nba,mlb,nhl,months,seasons,password,custom}
                         Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months,
                         seasons, password, or custom. Choosing 'all' executes all options except for
-                        'iterative' which much be run manually.
+                        'iterative' which must be run manually.
   --iter {ascii,num,spec,asciinum,asciispec,numspec,full}
                         Keyspace mode for iterative list generation. Only works when --type is set to
                         'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will
