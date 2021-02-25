@@ -19,7 +19,7 @@ You could use tools like crunch, a fancy bash loop over SecLists, or whatever ha
 
 
 ```
-python3 spraygen.py -h                                                                         [1339b56] 
+python3 spraygen.py -h
      _
     (  \_
     (    \_

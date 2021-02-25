@@ -7,6 +7,7 @@ import itertools
 import string
 import time
 from progress.bar import Bar
+import threading
 
 # Global start time to keep track of process running time
 start_time = time.time()
@@ -904,21 +905,40 @@ def gen_attrs_separators(list_mode, year_start, year_end):
     bar.finish()
 
 def combine_attrs_separators():
-    list_size = len(sep_list) + len(attr_list) + len(attr_sep_list)
-    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding relevant attribute/separator permutations to final list", suffix='%(percent)d%%', max=list_size)
+
+    print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding relevant attribute/separator permutations to final list, this could take some time...")
+
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=3)
+
+    # Multi threading each call to speed things up since each of these steps is independent of the other
+    sep_thread = threading.Thread(target=combine_seps, args=[])
+    attr_thread = threading.Thread(target=combine_attrs, args=[])
+    attr_sep_thread= threading.Thread(target=cobmine_attr_seps, args=[])
+
+    sep_thread.start()
+    attr_thread.start()
+    attr_sep_thread.start()
+
+    sep_thread.join()
+    bar.next()
+    attr_thread.join()
+    bar.next()
+    attr_sep_thread.join()
+    bar.finish()
+
+
+def combine_seps():
     if len(sep_list) > 0:
         for sep in sep_list:
             spray_list.append(sep)
-            bar.next()
+def combine_attrs():
     if len(attr_list) > 0:
         for attr in attr_list:
             spray_list.append(attr)
-            bar.next()
+def cobmine_attr_seps():
     if len(attr_sep_list) > 0:
         for item in attr_sep_list:
             spray_list.append(item)
-            bar.next()
-    bar.finish()
 
 def add_separators(separator):
     common_separators.append(separator)
