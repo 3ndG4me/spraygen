@@ -308,10 +308,12 @@ custom_attr_list = []
 # Global custom list to keep track of and manipulate and user supplied custom separators
 custom_sep_list = []
 
-
+# Global spray list, dictionary to make things fast cause that's what it should've been the whole time
 spray_list = {}
+# Global index tracker for the spray list dictionary keys, we don't actually need the keys since it's treated like a list so it's just a formality to satisfy the requirement
 spray_list_index = 0
 
+# Instead of "appending" directly we manually add in based on the global index, check if something exists already, add it if it doesn't and increment the global key
 def update_spray_list(item):
     global spray_list_index
 
