@@ -1,9 +1,11 @@
-# spraygen
+# Spraygen
 Password list generator for password spraying - prebaked with goodies
 
 <p align="center">
   <img width=400px src="resources/spraygenlogo.png" />
 </p>
+
+**Version 1.0**
 
 Generates permutations of Months, Seasons, Years, Sports Teams (NFL, NBA, MLB, NHL), Sports Scores, "Password", and even Iterable Keyspaces of a specified size.
 
@@ -18,7 +20,6 @@ You could use tools like crunch, a fancy bash loop over SecLists, or whatever ha
 
 ```
 python3 spraygen.py -h                                                                         [1339b56] 
-
      _
     (  \_
     (    \_
@@ -36,13 +37,14 @@ python3 spraygen.py -h                                                          
                         |_________|
 
     Original Art by Alex Chudnovsky (Unaffiliated)
-    Tool by 3ndG4me
+    Spraygen tool by 3ndG4me
+    Version 1.0
     
 usage: spraygen.py [-h] [--year_start YEAR_START] [--year_end YEAR_END] [-s separators] [-a attributes]
-                   [-w wordlist] [-n single word] [--mode {all,nosep,noattr,plain}]
+                   [-w wordlist] [-n single word] [--mode {all,nosep,noattr,plain,custom}]
                    [--type {all,iterative,sports,nfl,nba,mlb,nhl,months,seasons,password,custom}]
                    [--iter {ascii,num,spec,asciinum,asciispec,numspec,full}] [--size SIZE] [-o output file]
-                   [-p]
+                   [-p] [-v]
 
 Parse Spray List Arguments.
 
@@ -55,8 +57,9 @@ optional arguments:
   -a attributes         a comma delimited list of one or more attributes
   -w wordlist           path to a custom wordlist
   -n single word        single custom word to generate a custom wordlist with
-  --mode {all,nosep,noattr,plain}
-                        Mode for list generation. Can be all, no separators, no attributes, or plain.
+  --mode {all,nosep,noattr,plain,custom}
+                        Mode for list generation. Can be all, no separators, no attributes, plain, or custom
+                        (will only use parameters passed into -s or -a).
   --type {all,iterative,sports,nfl,nba,mlb,nhl,months,seasons,password,custom}
                         Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months,
                         seasons, password, or custom. Choosing 'all' executes all options except for
@@ -70,6 +73,7 @@ optional arguments:
                         'iterative' and an --iter keyspace mode is set.
   -o output file        name of a file to create and write the final output to
   -p                    prints the output line by line as plaintext
+  -v                    prints the current version of spraygen and exits (default: False)
   ```
 
   ## Basic Usage

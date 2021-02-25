@@ -6,6 +6,7 @@ from colorama import init, Fore, Back, Style
 import itertools
 import string
 import time
+from progress.bar import Bar
 
 # Global start time to keep track of process running time
 start_time = time.time()
@@ -301,6 +302,10 @@ attr_sep_list = []
 
 # Global custom list to keep track of and manipulate and user supplied custom words
 custom_wordlist = []
+# Global custom list to keep track of and manipulate and user supplied custom attributes
+custom_attr_list = []
+# Global custom list to keep track of and manipulate and user supplied custom separators
+custom_sep_list = []
 
 
 class DeDupedList(list):
@@ -319,42 +324,64 @@ spray_list = DeDupedList()
 def generate_keyspace_list(mode, size, year_start, year_end):
     if mode == "ascii":
         ascii_items = itertools.product(ascii_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(ascii_items))
         for item in ascii_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "num":
         num_items = itertools.product(numeral_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(num_items))
         for item in num_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "spec":
         spec_items = itertools.product(special_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(spec_items))
         for item in spec_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "asciinum":
         asciinum_items = itertools.product(ascii_numeral_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(asciinum_items))
         for item in asciinum_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "asciispec":
         asciispec_items = itertools.product(ascii_special_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(asciispec_items))
         for item in asciispec_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "numspec":
         numspec_items = itertools.product(numeral_special_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(numspec_items))
         for item in numspec_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
     elif mode == "full":
         full_items = itertools.product(full_keyspace, repeat=size)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", max=len(numspec_items))
         for item in full_items:
             spray_list.append(str(item))
             generate_years(str(item), year_start, year_end)
+            bar.next()
+        bar.finish()
 
 
 def generate_custom(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating custom list", max=len(custom_wordlist))
     for word in custom_wordlist:
         # Add base word to list
         spray_list.append(word)
@@ -362,9 +389,12 @@ def generate_custom(year_start, year_end):
         spray_list.append(word.lower())
         # Get year permutation with base custom word
         generate_years(word, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 
 def generate_password_perms(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating 'password' list", max=len(password_permutations))
     for password in password_permutations:
         # Add base word to list
         spray_list.append(password)
@@ -372,8 +402,11 @@ def generate_password_perms(year_start, year_end):
         spray_list.append(password.lower())
         # Get year permutation with base password permutation
         generate_years(password, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 def generate_months(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating months list", max=len(months))
     for month in months:
         # Add base word to list
         spray_list.append(month)
@@ -384,6 +417,7 @@ def generate_months(year_start, year_end):
 
 
 def generate_nfl(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating nfl list", max=len(nfl_teams))
     for team in nfl_teams:
         # Add base word to list
         spray_list.append(team)
@@ -395,9 +429,12 @@ def generate_nfl(year_start, year_end):
 
         # Get year permutation with base nfl team
         generate_years(team, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 
 def generate_nba(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating nba list", max=len(nba_teams))
     for team in nba_teams:
         # Add base word to list
         spray_list.append(team)
@@ -409,8 +446,11 @@ def generate_nba(year_start, year_end):
 
         # Get year permutation with base nba team
         generate_years(team, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 def generate_mlb(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating nfl list", max=len(mlb_teams))
     for team in mlb_teams:
         # Add base word to list
         spray_list.append(team)
@@ -422,8 +462,11 @@ def generate_mlb(year_start, year_end):
 
         # Get year permutation with base mlb team
         generate_years(team, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 def generate_nhl(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating nhl list", max=len(nfl_teams))
     for team in nhl_teams:
         # Add base word to list
         spray_list.append(team)
@@ -435,8 +478,12 @@ def generate_nhl(year_start, year_end):
 
         # Get year permutation with base nhl team
         generate_years(team, year_start, year_end)
+        bar.next()
+    bar.finish()
+        
 
 def generate_seasons(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating seasons list", max=len(seasons))
     for season in seasons:
         # Add base word to list
         spray_list.append(season)
@@ -445,6 +492,8 @@ def generate_seasons(year_start, year_end):
 
         # Get year permutation with base season
         generate_years(season, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 def generate_years(item, year_start, year_end):
     for year in range(year_start, year_end+1):
@@ -473,172 +522,340 @@ def generate_years(item, year_start, year_end):
         year_list.append(new_item)
 
 def generate_year_list_permutations():
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding year permutations to final list", max=len(nfl_teams))
     for item in year_list:
         # Add base word to list
         spray_list.append(item)
+        bar.next()
+    bar.finish()
 
-def gen_sports_separators(year_start, year_end):
+def gen_sports_separators(list_mode, sport, year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating separators list for sports scores", max=len(sports_scores_list))
+
+    if sport == "all" or sport == "sports":
+        sport = "all"
+
+    temp_separators = []
+    if list_mode == "custom":
+        temp_separators = custom_sep_list
+    else:
+        temp_separators = common_separators
+
     for team in sports_scores_list:
-        for score in superbowl_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in nbafinals_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in worldseries_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in stanleycup_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            for sep in common_separators:
-                # Get basic permutation with separators and just score
-                item = score + sep + team
+        if sport == "nfl" or sport == "all":
+            for score in superbowl_scores:
+                # Basic concat with score
+                item = team + score
                 generate_years(item, year_start, year_end)
                 spray_list.append(item)
-                # Get basic permutation with separators and just score
-                item = team + sep + score 
+                # Basic prepend with score
+                item = score + team
                 generate_years(item, year_start, year_end)
                 spray_list.append(item)
+                for sep in temp_separators:
+                    # Get basic permutation with separators and just score
+                    item = score + sep + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Get basic permutation with separators and just score
+                    item = team + sep + score 
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "nba" or sport == "all":
+            for score in nbafinals_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for sep in temp_separators:
+                    # Get basic permutation with separators and just score
+                    item = score + sep + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Get basic permutation with separators and just score
+                    item = team + sep + score 
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "mlb" or sport == "all":
+            for score in worldseries_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for sep in temp_separators:
+                    # Get basic permutation with separators and just score
+                    item = score + sep + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Get basic permutation with separators and just score
+                    item = team + sep + score 
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "nhl" or sport == "all":
+            for score in stanleycup_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for sep in temp_separators:
+                    # Get basic permutation with separators and just score
+                    item = score + sep + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Get basic permutation with separators and just score
+                    item = team + sep + score 
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        bar.next()
+    bar.finish()
                     
 
-def gen_sports_attributes(year_start, year_end):
+def gen_sports_attributes(list_mode, sport, year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes list for sports scores", max=len(sports_scores_list))
+    if sport == "all" or sport == "sports":
+        sport = "all"
+
+    temp_attrs = []
+    if list_mode == "custom":
+        temp_attrs = custom_attr_list
+    else:
+        temp_attrs = attributes
+
     for team in sports_scores_list:
-        for score in superbowl_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in nbafinals_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in worldseries_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in stanleycup_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            for attr in attributes:
-                # Get basic concat
-                item = team + score + attr
+        if sport == "nfl" or sport == "all":
+            for score in superbowl_scores:
+                # Basic concat with score
+                item = team + score
                 generate_years(item, year_start, year_end)
                 spray_list.append(item)
-                # Prepend permutation
-                item = score + attr + team
+                # Basic prepend with score
+                item = score + team
                 generate_years(item, year_start, year_end)
                 spray_list.append(item)
+                for attr in temp_attrs:
+                    # Get basic concat
+                    item = team + score + attr
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Prepend permutation
+                    item = score + attr + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "nba" or sport == "all":
+            for score in nbafinals_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    # Get basic concat
+                    item = team + score + attr
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Prepend permutation
+                    item = score + attr + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "mlb" or sport == "all":
+            for score in worldseries_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    # Get basic concat
+                    item = team + score + attr
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Prepend permutation
+                    item = score + attr + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        if sport == "nhl" or sport == "all":
+            for score in stanleycup_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    # Get basic concat
+                    item = team + score + attr
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+                    # Prepend permutation
+                    item = score + attr + team
+                    generate_years(item, year_start, year_end)
+                    spray_list.append(item)
+        bar.next()
+    bar.finish()
 
-def gen_sports_attrs_separators(year_start, year_end):
+def gen_sports_attrs_separators(list_mode, sport, year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes + separators list for sports scores", max=len(sports_scores_list))
+    if sport == "all" or sport == "sports":
+        sport = "all"
+
+    temp_separators = []
+    temp_attrs = []
+    if list_mode == "custom":
+        temp_separators = custom_sep_list
+        temp_attrs = custom_attr_list
+    else:
+        temp_separators = common_separators
+        temp_attrs = attributes
+
     for team in sports_scores_list:
-        for score in superbowl_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in nbafinals_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in worldseries_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-        for score in stanleycup_scores:
-            # Basic concat with score
-            item = team + score
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            # Basic prepend with score
-            item = score + team
-            generate_years(item, year_start, year_end)
-            spray_list.append(item)
-            for attr in attributes:
-                for sep in common_separators:
-                    # Get basic permutation with separators
-                    item = team + sep + score + attr
-                    generate_years(item, year_start, year_end)
-                    spray_list.append(item)
-                    # Get basic permutation with separators
-                    item = score + attr + sep + team
-                    generate_years(item, year_start, year_end)
-                    spray_list.append(item)
+        if sport == "nfl" or sport == "all":
+            for score in superbowl_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    for sep in temp_separators:
+                        # Get basic permutation with separators
+                        item = team + sep + score + attr
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+                        # Get basic permutation with separators
+                        item = score + attr + sep + team
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+        elif sport == "nba" or sport == "all":
+            for score in nbafinals_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    for sep in temp_separators:
+                        # Get basic permutation with separators
+                        item = team + sep + score + attr
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+                        # Get basic permutation with separators
+                        item = score + attr + sep + team
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+        elif sport == "mlb" or sport == "all":
+            for score in worldseries_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    for sep in temp_separators:
+                        # Get basic permutation with separators
+                        item = team + sep + score + attr
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+                        # Get basic permutation with separators
+                        item = score + attr + sep + team
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+        elif sport == "nhl" or sport == "all":
+            for score in stanleycup_scores:
+                # Basic concat with score
+                item = team + score
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                # Basic prepend with score
+                item = score + team
+                generate_years(item, year_start, year_end)
+                spray_list.append(item)
+                for attr in temp_attrs:
+                    for sep in temp_separators:
+                        # Get basic permutation with separators
+                        item = team + sep + score + attr
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+                        # Get basic permutation with separators
+                        item = score + attr + sep + team
+                        generate_years(item, year_start, year_end)
+                        spray_list.append(item)
+        bar.next()
+    bar.finish()
 
 
-def gen_separators(year_start, year_end):
+def gen_separators(list_mode, year_start, year_end):
     temp_list = spray_list.copy()
-    for item in temp_list:
-        for sep in common_separators:
-            # Get year permutation with separators
-            new_item = item + sep
-            generate_years(new_item, year_start, year_end)
-            sep_list.append(new_item)
-            # Get year permutation with separators prepend
-            new_item = sep + item
-            generate_years(new_item, year_start, year_end)
-            sep_list.append(new_item)
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating separators list", max=len(temp_list))
+    if list_mode == "custom":
+        for item in temp_list:
+            for sep in custom_sep_list:
+                # Get year permutation with separators
+                new_item = item + sep
+                generate_years(new_item, year_start, year_end)
+                sep_list.append(new_item)
+                # Get year permutation with separators prepend
+                new_item = sep + item
+                generate_years(new_item, year_start, year_end)
+                sep_list.append(new_item)
+            bar.next()
+    else:
+        for item in temp_list:
+            for sep in common_separators:
+                # Get year permutation with separators
+                new_item = item + sep
+                generate_years(new_item, year_start, year_end)
+                sep_list.append(new_item)
+                # Get year permutation with separators prepend
+                new_item = sep + item
+                generate_years(new_item, year_start, year_end)
+                sep_list.append(new_item)
+            bar.next()
+    bar.finish()
 
-def gen_attributes(year_start, year_end):
+def gen_attributes(list_mode, year_start, year_end):
     temp_list = spray_list.copy()
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes list", max=len(temp_list))
+    if list_mode == "custom":
+        for attr in custom_attr_list:
+            # Get basic concat
+            new_item = item + attr
+            generate_years(new_item, year_start, year_end)
+            attr_list.append(new_item)
+
+            # Prepend permutation
+            new_item = attr + item
+            generate_years(new_item, year_start, year_end)
+            attr_list.append(new_item)
+        bar.next()
     for item in temp_list:
         for attr in attributes:
             # Get basic concat
@@ -650,9 +867,24 @@ def gen_attributes(year_start, year_end):
             new_item = attr + item
             generate_years(new_item, year_start, year_end)
             attr_list.append(new_item)
+        bar.next()
+    bar.finish()
 
-def gen_attrs_separtors(year_start, year_end):
+def gen_attrs_separators(list_mode, year_start, year_end):
     temp_list = spray_list.copy()
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes + separators list", max=len(temp_list))
+    if list_mode == "custom":
+        for attr in custom_attr_list:
+            for sep in custom_sep_list:
+                # Permutation separator and attribute
+                new_item = item + sep + attr
+                generate_years(new_item, year_start, year_end)
+                attr_sep_list.append(new_item)
+                # Prepend separator and attribute
+                new_item = attr + sep + item
+                generate_years(new_item, year_start, year_end)
+                attr_sep_list.append(new_item)
+        bar.next()
     for item in temp_list:
         for attr in attributes:
             for sep in common_separators:
@@ -664,17 +896,28 @@ def gen_attrs_separtors(year_start, year_end):
                 new_item = attr + sep + item
                 generate_years(new_item, year_start, year_end)
                 attr_sep_list.append(new_item)
+        bar.next()
+    bar.finish()
 
 def combine_attrs_separators():
     if len(sep_list) > 0:
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding separator permutations to final list", max=len(sep_list))
         for sep in sep_list:
             spray_list.append(sep)
+            bar.next()
+        bar.finish()
     if len(attr_list) > 0:
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding attribute permutations to final list", max=len(attr_list))
         for attr in attr_list:
             spray_list.append(attr)
+            bar.next()
+        bar.finish()
     if len(attr_sep_list) > 0:
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding attribute + separator permutations to final list", max=len(attr_sep_list))
         for item in attr_sep_list:
             spray_list.append(item)
+            bar.next()
+        bar.finish()
 
 def add_separators(separator):
     common_separators.append(separator)
@@ -717,7 +960,8 @@ def main():
                         |_________|
 
     Original Art by Alex Chudnovsky (Unaffiliated)
-    Tool by 3ndG4me
+    Spraygen tool by 3ndG4me
+    Version 1.0
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
@@ -729,14 +973,19 @@ def main():
     parser.add_argument('-a', metavar='attributes', help="a comma delimited list of one or more attributes", type=str)
     parser.add_argument('-w', metavar='wordlist', help="path to a custom wordlist", type=str)
     parser.add_argument('-n', metavar='single word', help="single custom word to generate a custom wordlist with", type=str)
-    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, or plain.", choices=['all', 'nosep', 'noattr', 'plain'], default="all", type=str)
+    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, plain, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'plain', 'custom'], default="all", type=str)
     parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, or custom. Choosing 'all' executes all options except for 'iterative' which much be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'custom'], default="all", type=str)
     parser.add_argument('--iter', help="Keyspace mode for iterative list generation. Only works when --type is set to 'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will generate all permutations of the selected keyspace with a given length set with the --size parameter.", choices=['ascii', 'num', 'spec', 'asciinum', 'asciispec', 'numspec', 'full'], default="full", type=str)
     parser.add_argument('--size', help="Length of passwords generated by a set keyspace. Only works when --type is set to 'iterative' and an --iter keyspace mode is set.", default="4", type=int)
     parser.add_argument('-o', metavar='output file', help="name of a file to create and write the final output to", type=str)
     parser.add_argument('-p', metavar='plaintext output', action=argparse.BooleanOptionalAction, help="prints the output line by line as plaintext", type=str)
+    parser.add_argument('-v', metavar='version output', action=argparse.BooleanOptionalAction, help="prints the current version of spraygen and exits", default=False, type=str)
 
     args = parser.parse_args()
+
+    if args.v:
+        print("Spraygen Version: 1.0")
+        return
 
     if args.year_start == None:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Year Start not provided, setting to current year...")
@@ -749,19 +998,43 @@ def main():
     if args.s != None:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding custom separators to list...")
         temp_list = args.s.split(",")
-        for sep in temp_list:
-            common_separators.append(sep)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(temp_list))
+        if arg.type == "custom":
+            for sep in temp_list:
+                custom_sep_list.append(sep)
+                bar.next()
+        else:
+            for sep in temp_list:
+                common_separators.append(sep)
+                bar.next()
+        bar.finish()
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom separators added in %s seconds ---" % (time.time() - start_time))
     if args.a != None:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding custom attributes to list...")
         temp_list = args.a.split(",")
-        for attr in temp_list:
-            attributes.append(attr)
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(temp_list))
+        if arg.type == "custom":
+            for attr in temp_list:
+                custom_attr_list.append(attr)
+                bar.next()
+        else:
+            for attr in temp_list:
+                attr_list.append(attr)
+                bar.next()
+        bar.finish()
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom attributes added in %s seconds ---" % (time.time() - start_time))
     if args.w != None:
+        print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Creating custom wordlist...")
         customFile = open(args.w, "r")
+        global custom_wordlist
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(customFile))
         for item in customFile:
-            custom_wordlist.append(item)
+            custom_wordlist.append(item.strip())
+            bar.next()
+        customFile.close()
+        bar.finish()
+        # Filter any blank lines
+        custom_wordlist = list(filter(None, custom_wordlist))
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom wordlist loaded in %s seconds ---" % (time.time() - start_time))
     if args.n != None:
         custom_wordlist.append(args.n)
@@ -787,7 +1060,6 @@ def main():
         if args.type == "months":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating MONTHS list...")
             generate_months(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated months in %s seconds ---" % (time.time() - start_time))
         elif args.type == "iterative":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating ITERATIVE list...")
@@ -795,71 +1067,80 @@ def main():
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "List keyspace will be: " + args.iter)
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "This is generating literally every permutation in that keyspace, this will take some time...")
             generate_keyspace_list(args.iter, args.size, args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated iterative in %s seconds ---" % (time.time() - start_time))
         elif args.type == "sports":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating SPORTS list...")
             generate_sports(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated sports in %s seconds ---" % (time.time() - start_time))
         elif args.type == "nfl":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NFL list...")
             generate_nfl(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nfl in %s seconds ---" % (time.time() - start_time))
         elif args.type == "nba":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NBA list...")
             generate_nba(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nba in %s seconds ---" % (time.time() - start_time))
         elif args.type == "mlb":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating MLB list...")
             generate_mlb(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated mlb in %s seconds ---" % (time.time() - start_time))
         elif args.type == "nhl":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating NHL list...")
             generate_nhl(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated nhl in %s seconds ---" % (time.time() - start_time))
         elif args.type == "seasons":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating SEASONS list...")
             generate_seasons(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated seasons in %s seconds ---" % (time.time() - start_time))
         elif args.type == "password":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating PASSWORD list...")
             generate_password_perms(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated 'password' in %s seconds ---" % (time.time() - start_time))
         elif args.type == "custom":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating CUSTOM list...")
             generate_custom(args.year_start, args.year_end)
-            generate_year_list_permutations()
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated custom in %s seconds ---" % (time.time() - start_time))
     else:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating ALL list...(If a custom wordlist is specified it will be used)")
         generate_all(args.year_start, args.year_end)
-        generate_year_list_permutations()
-
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated all in %s seconds ---" % (time.time() - start_time))
     if isNotSep == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating separators...")
-        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- separators generated in %s seconds ---" % (time.time() - start_time))
-        gen_separators(args.year_start, args.year_end)
+        gen_separators(args.mode, args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
-            gen_sports_separators(args.year_start, args.year_end)
+            gen_sports_separators(args.mode, args.type, args.year_start, args.year_end)
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- separators generated in %s seconds ---" % (time.time() - start_time))
     if isNoAttr == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes...")
-        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attributes generated in %s seconds ---" % (time.time() - start_time))
-        gen_attributes(args.year_start, args.year_end)
+        gen_attributes(args.mode, args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
-            gen_sports_attributes(args.year_start, args.year_end)
+            gen_sports_attributes(args.mode, args.type, args.year_start, args.year_end)
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attributes generated in %s seconds ---" % (time.time() - start_time))
     if isNotSep == False and isNoAttr == False:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating attributes + separators...")
-        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attribute + separators generated in %s seconds ---" % (time.time() - start_time))
-        gen_attrs_separtors(args.year_start, args.year_end)
+        gen_attrs_separators(args.mode, args.year_start, args.year_end)
         if len(sports_scores_list) > 0:
-            gen_sports_attrs_separators(args.year_start, args.year_end)
+            gen_sports_attrs_separators(args.mode, args.type, args.year_start, args.year_end)
+        print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- attribute + separators generated in %s seconds ---" % (time.time() - start_time))
+    if args.type == "custom":
+        if len(custom_sep_list) > 0:
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating custom separators list...")
+            gen_separators(args.mode, args.type, args.year_start, args.year_end)
+            if len(sports_scores_list) > 0:
+                gen_sports_separators(args.mode, args.type, args.year_start, args.year_end)
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom separators generated in %s seconds ---" % (time.time() - start_time))
+        if len(custom_attr_list) > 0:
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating custom attributes list...")
+            gen_attributes(args.mode, args.year_start, args.year_end)
+            if len(sports_scores_list) > 0:
+                gen_sports_attributes(args.mode, args.type, args.year_start, args.year_end)
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom attributes generated in %s seconds ---" % (time.time() - start_time))
+        if len(custom_sep_list) > 0:
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating custom attributes + separators list...")
+            gen_sports_attrs_separators(args.mode, args.year_start, args.year_end)
+            if len(sports_scores_list) > 0:
+                gen_sports_attrs_separators(args.mode, args.year_start, args.year_end)
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom attributes + separators generated in %s seconds ---" % (time.time() - start_time))
     elif isPlain == True or (isNotSep == True and isNoAttr == True):
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Skipping separators and attributes...")
 
@@ -873,9 +1154,12 @@ def main():
     if args.o != None:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Writing output to: " + args.o)
         f = open(args.o, "a")
+        bar = Bar(Fore.GREEN + "[*] Info: " + Style.RESET_ALL + "Progress", max=len(spray_list))
         for password in spray_list:
             f.write(password + "\n")
+            bar.next()
         f.close()
+        bar.finish
 
     if args.p == True:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Printing final list:")
