@@ -523,7 +523,7 @@ def generate_years(item, year_start, year_end):
         year_list.append(new_item)
 
 def generate_year_list_permutations():
-    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding year permutations to final list", suffix='%(percent)d%%', max=len(nfl_teams))
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding year permutations to final list", suffix='%(percent)d%%', max=len(year_list))
     for item in year_list:
         # Add base word to list
         spray_list.append(item)
@@ -924,6 +924,7 @@ def combine_attrs_separators():
     attr_thread.join()
     bar.next()
     attr_sep_thread.join()
+    bar.next()
     bar.finish()
 
 
