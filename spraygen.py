@@ -1050,9 +1050,13 @@ def main():
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom attributes added in %s seconds ---" % (time.time() - start_time))
     if args.w != None:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Creating custom wordlist...")
-        customFile = open(args.w, "r")
+        fileSize = open(args.w, "r")
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(fileSize.readlines()))
+        fileSize.close()
+
         global custom_wordlist
-        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(customFile.readlines()))
+
+        customFile = open(args.w, "r")
         for item in customFile:
             custom_wordlist.append(item.strip())
             bar.next()
@@ -1060,6 +1064,7 @@ def main():
         bar.finish()
         # Filter any blank lines
         custom_wordlist = list(filter(None, custom_wordlist))
+
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- custom wordlist loaded in %s seconds ---" % (time.time() - start_time))
     if args.n != None:
         custom_wordlist.append(args.n)
@@ -1185,7 +1190,7 @@ def main():
     if args.o != None:
         print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Writing output to: " + args.o)
         f = open(args.o, "a")
-        bar = Bar(Fore.GREEN + "[*] Info: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(spray_list))
+        bar = Bar(Fore.GREEN + "[*] Success: " + Style.RESET_ALL + "Progress", suffix='%(percent)d%%', max=len(spray_list))
         for password in spray_list.values():
             f.write(password + "\n")
             bar.next()
@@ -1200,8 +1205,8 @@ def main():
     print(Fore.GREEN + "\n[+] Success: " + Style.RESET_ALL +  "--- finished in %s seconds ---" % (time.time() - start_time))
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Done!")
 
-main()
-#try:
-#    main()
-#except Exception as e:
-#    print(Fore.RED + "\n[!] Error: " + Style.RESET_ALL + str(e))
+
+try:
+    main()
+except Exception as e:
+    print(Fore.RED + "\n[!] Error: " + Style.RESET_ALL + str(e))
