@@ -997,7 +997,7 @@ def main():
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.3
+    Version 1.4
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
@@ -1016,14 +1016,14 @@ def main():
     parser.add_argument('--min_length', help="Minimum length of passwords to include in the list. (Default: 1)", default=1, type=int)
     parser.add_argument('--max_length', help="Maximum length of passwords to include in the list (Default: 999)", default=999, type=int)
     parser.add_argument('-o', metavar='output file', help="name of a file to create and write the final output to", type=str)
-    parser.add_argument('-p', metavar='plaintext output', action=argparse.BooleanOptionalAction, help="prints the output line by line as plaintext", type=str)
+    parser.add_argument('-p', action="store_true", help="prints the output line by line as plaintext", dest="p")
     parser.add_argument('--sort', help="Sort final output. Sorting methods supported are nosort, asc, desc, random.", choices=['nosort', 'asc', 'desc', 'random'], default="nosort", type=str)
-    parser.add_argument('-v', metavar='version output', action=argparse.BooleanOptionalAction, help="prints the current version of spraygen and exits", default=False, type=str)
+    parser.add_argument('-v', action="store_true", help="prints the current version of spraygen and exits", dest="v")
 
     args = parser.parse_args()
 
     if args.v:
-        print("Spraygen Version: 1.3")
+        print("Spraygen Version: 1.4")
         return
 
     if args.year_start == None:
