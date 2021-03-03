@@ -81,4 +81,4 @@ optional arguments:
 
 
   ## Credits
-  - Mark Hedrick - for the boolean python3.8 backwards compatibility fix
+  - [@MarkoH17](https://github.com/MarkoH17) - for the boolean python3.8 backwards compatibility fix
