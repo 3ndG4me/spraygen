@@ -21,6 +21,7 @@ isPlain = False
 isYears = True
 isNotSep = False
 isNoAttr = False
+isLetter = False
 
 # Months list
 months = [
@@ -396,6 +397,7 @@ def generate_custom(year_start, year_end):
     for word in custom_wordlist:
         # Add base word to list
         update_spray_list(word)
+        update_spray_list(word.capitalize())
         update_spray_list(word.upper())
         update_spray_list(word.lower())
         # Get year permutation with base custom word
@@ -409,6 +411,7 @@ def generate_password_perms(year_start, year_end):
     for password in password_permutations:
         # Add base word to list
         update_spray_list(password)
+        update_spray_list(password.capitalize())
         update_spray_list(password.upper())
         update_spray_list(password.lower())
         # Get year permutation with base password permutation
@@ -421,6 +424,7 @@ def generate_months(year_start, year_end):
     for month in months:
         # Add base word to list
         update_spray_list(month)
+        update_spray_list(month.capitalize())
         update_spray_list(month.upper())
         update_spray_list(month.lower())
         # Get year permutation with base month
@@ -432,9 +436,11 @@ def generate_nfl(year_start, year_end):
     for team in nfl_teams:
         # Add base word to list
         update_spray_list(team)
+        update_spray_list(team.capitalize())
         update_spray_list(team.upper())
         update_spray_list(team.lower())
         sports_scores_list.append(team)
+        sports_scores_list.append(team.capitalize())
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
@@ -449,9 +455,11 @@ def generate_nba(year_start, year_end):
     for team in nba_teams:
         # Add base word to list
         update_spray_list(team)
+        update_spray_list(team.capitalize())
         update_spray_list(team.upper())
         update_spray_list(team.lower())
         sports_scores_list.append(team)
+        sports_scores_list.append(team.capitalize())
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
@@ -465,9 +473,11 @@ def generate_mlb(year_start, year_end):
     for team in mlb_teams:
         # Add base word to list
         update_spray_list(team)
+        update_spray_list(team.capitalize())
         update_spray_list(team.upper())
         update_spray_list(team.lower())
         sports_scores_list.append(team)
+        sports_scores_list.append(team.capitalize())
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
@@ -481,9 +491,11 @@ def generate_nhl(year_start, year_end):
     for team in nhl_teams:
         # Add base word to list
         update_spray_list(team)
+        update_spray_list(team.capitalize())
         update_spray_list(team.upper())
         update_spray_list(team.lower())
         sports_scores_list.append(team)
+        sports_scores_list.append(team.capitalize())
         sports_scores_list.append(team.upper())
         sports_scores_list.append(team.lower())
 
@@ -498,6 +510,7 @@ def generate_seasons(year_start, year_end):
     for season in seasons:
         # Add base word to list
         update_spray_list(season)
+        update_spray_list(season.capitalize())
         update_spray_list(season.upper())
         update_spray_list(season.lower())
 
@@ -514,30 +527,35 @@ def generate_years(item, year_start, year_end, attr=None):
             # Get basic year concat
             new_item = item + str(year)
             year_list.append(new_item)
+            year_list.append(new_item.capitalize())
             year_list.append(new_item.lower())
             year_list.append(new_item.upper())
 
             # Prepend year permutation
             new_item = str(year) + item
+            year_list.append(new_item)
+            year_list.append(new_item.capitalize())
             year_list.append(new_item.lower())
             year_list.append(new_item.upper())
-            year_list.append(new_item)
 
             # Cut year concat
             new_item = item + str(year)[-2:]
+            year_list.append(new_item)
+            year_list.append(new_item.capitalize())
             year_list.append(new_item.lower())
             year_list.append(new_item.upper())
-            year_list.append(new_item)
 
             # Prepend cut year concat
             new_item = str(year)[-2:] + item
+            year_list.append(new_item)
+            year_list.append(new_item.capitalize())
             year_list.append(new_item.lower())
             year_list.append(new_item.upper())
-            year_list.append(new_item)
 
             if attr:
                 new_item = item + str(year) + attr
                 year_list.append(new_item)
+                year_list.append(new_item.capitalize())
                 year_list.append(new_item.lower())
                 year_list.append(new_item.upper())
 
@@ -933,6 +951,38 @@ def gen_attrs_separators(list_mode, year_start, year_end):
             bar.next()
     bar.finish()
 
+
+# If the letter mode is enabled this will iterate over all generated items and do a replacement on common letters for 1337 speak or other common substitutes
+def gen_letter_replacement():
+    # Letters list, mostly common vowels with some common consonants
+    letters = "AEIOSaeios"
+    temp_list = spray_list.copy()
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating letter replacement list", suffix='%(percent)d%%', max=len(temp_list))
+    for item in temp_list.values():
+        for l in letters:
+            if l.lower() == "a":
+                new_item = item.replace(l.lower(), "4")
+                update_spray_list(new_item)
+                new_item = item.replace(l.lower(), "@")
+                update_spray_list(new_item)
+            if l.lower() == "e":
+                new_item = item.replace(l.lower(), "3")
+                update_spray_list(new_item)
+            if l.lower() == "i":
+                new_item = item.replace(l.lower(), "1")
+                update_spray_list(new_item)
+                new_item = item.replace(l.lower(), "!")
+                update_spray_list(new_item)
+            if l.lower() == "o":
+                new_item = item.replace(l.lower(), "0")
+                update_spray_list(new_item)
+            if l.lower() == "s":
+                new_item = item.replace(l.lower(), "5")
+                update_spray_list(new_item)
+                new_item = item.replace(l.lower(), "$")
+                update_spray_list(new_item)
+        bar.next()
+
 def combine_attrs_separators():
 
     print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding relevant attribute/separator permutations to final list, this could take some time...")
@@ -1012,7 +1062,7 @@ def main():
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.4
+    Version 1.5
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
@@ -1024,8 +1074,8 @@ def main():
     parser.add_argument('-a', metavar='attributes', help="a comma delimited list of one or more attributes", type=str)
     parser.add_argument('-w', metavar='wordlist', help="path to a custom wordlist", type=str)
     parser.add_argument('-n', metavar='single word', help="single custom word to generate a custom wordlist with", type=str)
-    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, only years, plain, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'years', 'plain', 'custom'], default="all", type=str)
-    parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, quick, or custom. Choosing 'all' executes all options except for 'iterative' which must be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'quick', 'custom'], default="all", type=str, nargs="+")
+    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, only years, plain, letter, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'years', 'plain', 'letter', 'custom'], default="all", type=str)
+    parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, or custom. Choosing 'all' executes all options except for 'iterative' which must be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'custom'], default="all", type=str, nargs="+")
     parser.add_argument('--iter', help="Keyspace mode for iterative list generation. Only works when --type is set to 'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will generate all permutations of the selected keyspace with a given length set with the --size parameter.", choices=['ascii', 'num', 'spec', 'asciinum', 'asciispec', 'numspec', 'full'], default="full", type=str)
     parser.add_argument('--size', help="Length of passwords generated by a set keyspace. Only works when --type is set to 'iterative' and an --iter keyspace mode is set.", default="4", type=int)
     parser.add_argument('--min_length', help="Minimum length of passwords to include in the list. (Default: 1)", default=1, type=int)
@@ -1038,7 +1088,7 @@ def main():
     args = parser.parse_args()
 
     if args.v:
-        print("Spraygen Version: 1.4")
+        print("Spraygen Version: 1.5")
         return
 
     if args.year_start == None:
@@ -1109,6 +1159,7 @@ def main():
         global isYears
         global isNotSep
         global isNoAttr
+        global isLetter
         if args.mode == "plain":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating PLAIN list...")
             isPlain = True
@@ -1126,6 +1177,8 @@ def main():
             isYears = True
             isNotSep = True
             isNoAttr = True
+        elif args.mode == "letter":
+            isLetter = True
         elif args.mode == "custom":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating CUSTOM SEPARATOR/ATTRIBUTE list...")
             isPlain = True
@@ -1225,6 +1278,11 @@ def main():
     print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Adding new generated items to the list...")
     combine_attrs_separators()
     generate_year_list_permutations()
+   
+    if isLetter:
+        print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating letter replacement...")
+        gen_letter_replacement()
+        print(Fore.GREEN + "\n[+] Success: " + Style.RESET_ALL +  "--- letter replacement generated in %s seconds ---" % (time.time() - start_time))
 
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- initial list built in %s seconds ---" % (time.time() - start_time))
     print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL + "Bulding final list!")
