@@ -1,0 +1,2 @@
+# Ignore python venv evnrionment folders that end in env
+*env
