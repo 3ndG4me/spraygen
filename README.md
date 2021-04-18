@@ -88,3 +88,4 @@ optional arguments:
 
   ## Credits
   - [@MarkoH17](https://github.com/MarkoH17) - for the boolean python3.8 backwards compatibility fix
+  - [@absolomb](https://github.com/absolomb) - for enhancing type selection and attribute logic in year generation
