@@ -85,6 +85,8 @@ optional arguments:
   1. Install dependencies `pip3 install -r requirements.txt`
   2. Run `python3 spraygen.py -p` - this will generate all default built in wordlists with all permutations and print them to the screen
 
+  ## Usage Recommendations
+  - [Usage Docs](docs/usage.md)
 
   ## Credits
   - [@MarkoH17](https://github.com/MarkoH17) - for the boolean python3.8 backwards compatibility fix
