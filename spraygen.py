@@ -22,6 +22,7 @@ isYears = True
 isNotSep = False
 isNoAttr = False
 isLetter = False
+isQuick = False
 
 # Months list
 months = [
@@ -282,6 +283,21 @@ password_permutations = [
     "P4$$w0rd"
 ]
 
+# Common misc passwords
+common_words = {
+    "Welcome",
+    "Baseball",
+    "Football",
+    "Letmein",
+    "Access",
+    "Superman",
+    "Batman",
+    "Qwertyuiop",
+    "Qwerty",
+    "Jesus",
+    "Coronavirus"
+} 
+
 # Global keyspace for random strings
 ascii_keyspace = string.ascii_letters
 numeral_keyspace = string.digits
@@ -405,6 +421,31 @@ def generate_custom(year_start, year_end):
         bar.next()
     bar.finish()
 
+def generate_common(year_start, year_end):
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating common list", suffix='%(percent)d%%', max=len(common_words))
+    for word in common_words:
+        # Add base word to list
+        update_spray_list(word)
+        update_spray_list(word.capitalize())
+        update_spray_list(word.upper())
+        update_spray_list(word.lower())
+        # Get year permutation with base common word
+        generate_years(word, year_start, year_end)
+        bar.next()
+    bar.finish()
+
+def generate_short(year_start, year_end):
+    short_list = [*common_words, *seasons, *password_permutations, *months]
+    if custom_wordlist:
+        short_list += custom_wordlist
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating short list", suffix='%(percent)d%%', max=len(short_list))
+    for word in short_list:
+        # Add base word to list
+        update_spray_list(word.capitalize())
+        # Get year permutation with base word
+        generate_years(word, year_start, year_end)
+        bar.next()
+    bar.finish()
 
 def generate_password_perms(year_start, year_end):
     bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating 'password' list", suffix='%(percent)d%%', max=len(password_permutations))
@@ -521,7 +562,24 @@ def generate_seasons(year_start, year_end):
 
 def generate_years(item, year_start, year_end, attr=None):
     
-    if isYears:
+    # for quick mode just do simple concats with first letter capitalized
+    if isYears and isQuick:
+        
+        for year in range(year_start, year_end+1):
+            # Get basic year concat
+            new_item = item + str(year)
+            year_list.append(new_item.capitalize())
+
+            # Cut year concat
+            new_item = item + str(year)[-2:]
+            year_list.append(new_item.capitalize())
+
+            if attr:
+                new_item = item + str(year) + attr
+                year_list.append(new_item.capitalize())
+
+
+    elif isYears and not isQuick:
 
         for year in range(year_start, year_end+1):
             # Get basic year concat
@@ -905,18 +963,27 @@ def gen_attributes(list_mode, year_start, year_end):
             for attr in attributes:
                 # Get basic concat
                 new_item = item + attr
-                generate_years(new_item, year_start, year_end)
-                attr_list.append(new_item)
+                # only concat with ! before the year for quick mode
+                if isQuick and attr in ("!"):
+                    generate_years(new_item, year_start, year_end)
+                elif not isQuick:
+                    generate_years(new_item, year_start, year_end)
+                
+                # only add just the raw concat if the item is not a month or season for quick mode
+                if isQuick and item not in months and item not in seasons:
+                    attr_list.append(new_item)
+                elif not isQuick:
+                    attr_list.append(new_item)
 
-                # Prepend permutation
-                new_item = attr + item
-                generate_years(new_item, year_start, year_end)
-                attr_list.append(new_item)
+                # Prepend permutation if quick mode isn't selected
+                if not isQuick:
+                    new_item = attr + item
+                    generate_years(new_item, year_start, year_end)
+                    attr_list.append(new_item)
 
                 # Append permutation but just use the default '!' or '#' variations since they make the most sense when combined with years
                 if attr in ("!", "!!", "#", "##"):
                     generate_years(item, year_start, year_end, attr)
-                    attr_list.append(item)
             bar.next()
     bar.finish()
 
@@ -1062,7 +1129,7 @@ def main():
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.5
+    Version 1.6
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
@@ -1074,8 +1141,8 @@ def main():
     parser.add_argument('-a', metavar='attributes', help="a comma delimited list of one or more attributes", type=str)
     parser.add_argument('-w', metavar='wordlist', help="path to a custom wordlist", type=str)
     parser.add_argument('-n', metavar='single word', help="single custom word to generate a custom wordlist with", type=str)
-    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, only years, plain, letter, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'years', 'plain', 'letter', 'custom'], default="all", type=str)
-    parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, or custom. Choosing 'all' executes all options except for 'iterative' which must be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'custom'], default="all", type=str, nargs="+")
+    parser.add_argument('--mode', help="Mode for list generation. Can be all, no separators, no attributes, only years, plain, letter, quick, or custom (will only use parameters passed into -s or -a).", choices=['all', 'nosep', 'noattr', 'years', 'plain', 'letter', 'quick', 'custom'], default="all", type=str)
+    parser.add_argument('--type', help="Type of list to generate. Can be all, iterative, sports, nfl, nba, mlb, nhl, months, seasons, password, common, short, or custom. Choosing 'all' executes all options except for 'iterative' which must be run manually.", choices=['all', 'iterative', 'sports', 'nfl', 'nba', 'mlb', 'nhl', 'months', 'seasons', 'password', 'common', 'short', 'custom'], default="all", type=str, nargs="+")
     parser.add_argument('--iter', help="Keyspace mode for iterative list generation. Only works when --type is set to 'iterative'. Can be ascii, num, spec, asciinum, asciispec, numspec, or full. Will generate all permutations of the selected keyspace with a given length set with the --size parameter.", choices=['ascii', 'num', 'spec', 'asciinum', 'asciispec', 'numspec', 'full'], default="full", type=str)
     parser.add_argument('--size', help="Length of passwords generated by a set keyspace. Only works when --type is set to 'iterative' and an --iter keyspace mode is set.", default="4", type=int)
     parser.add_argument('--min_length', help="Minimum length of passwords to include in the list. (Default: 1)", default=1, type=int)
@@ -1088,7 +1155,7 @@ def main():
     args = parser.parse_args()
 
     if args.v:
-        print("Spraygen Version: 1.5")
+        print("Spraygen Version: 1.6")
         return
 
     if args.year_start == None:
@@ -1160,6 +1227,7 @@ def main():
         global isNotSep
         global isNoAttr
         global isLetter
+        global isQuick
         if args.mode == "plain":
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating PLAIN list...")
             isPlain = True
@@ -1185,6 +1253,11 @@ def main():
             isYears = True
             isNotSep = True
             isNoAttr = True
+        elif args.mode == "quick":
+            isQuick = True
+            isPlain = False
+            isNotSep = True
+            isYears = True
     
     if "all" not in args.type:
         if "months" in args.type:
@@ -1230,6 +1303,14 @@ def main():
             print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating CUSTOM list...")
             generate_custom(args.year_start, args.year_end)
             print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated custom in %s seconds ---" % (time.time() - start_time))
+        if "common" in args.type:
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating COMMON list...")
+            generate_common(args.year_start, args.year_end)
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated common list in %s seconds ---" % (time.time() - start_time))
+        if "short" in args.type:
+            print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating SHORT list...")
+            generate_short(args.year_start, args.year_end)
+            print(Fore.GREEN + "[+] Success: " + Style.RESET_ALL +  "--- generated short list in %s seconds ---" % (time.time() - start_time))
     else:
         print(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating ALL list...(If a custom wordlist is specified it will be used)")
         generate_all(args.year_start, args.year_end)
