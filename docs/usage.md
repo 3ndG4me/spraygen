@@ -13,7 +13,7 @@ Generate limited custom separators and attributes with some of the most common. 
 `python3 spraygen.py --mode custom -s ".,_" -a "\!,\!\!,#,##,1,123,1234" --type password -o spray_list.txt`
 
 Example with custom word list:
-`python3 spraygen.py --mode custom -s ".,_" -a "\!,\!\!,#,##,1,123,1234" -w wordlist.txt -o spray_list.txt`
+`python3 spraygen.py --mode custom -s ".,_" -a "\!,\!\!,#,##,1,123,1234" --type custom -w wordlist.txt -o spray_list.txt`
 
 
 # Seasons and Months
