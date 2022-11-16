@@ -5,7 +5,7 @@ Password list generator for password spraying - prebaked with goodies
   <img width=400px src="resources/spraygenlogo.png" />
 </p>
 
-**Version 1.6**
+**Version 1.7**
 
 Generates permutations of Months, Seasons, Years, Sports Teams (NFL, NBA, MLB, NHL), Sports Scores, "Password", and even Iterable Keyspaces of a specified size.
 
@@ -40,7 +40,7 @@ python3 spraygen.py -h
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.6
+    Version 1.7
     
 usage: spraygen.py [-h] [--year_start YEAR_START] [--year_end YEAR_END] [-s separators] [-a attributes] [-w wordlist] [-n single word] [--mode {all,nosep,noattr,years,plain,letter,quick,custom}]
                    [--type {all,iterative,sports,nfl,nba,mlb,nhl,months,seasons,password,common,short,custom} [{all,iterative,sports,nfl,nba,mlb,nhl,months,seasons,password,common,short,custom} ...]]
