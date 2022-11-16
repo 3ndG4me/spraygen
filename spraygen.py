@@ -400,7 +400,7 @@ def generate_keyspace_list(mode, size, year_start, year_end):
         bar.finish()
     elif mode == "full":
         full_items = list(itertools.product(full_keyspace, repeat=size))
-        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(numspec_items))
+        bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating " + mode + " keyspace list", suffix='%(percent)d%%', max=len(full_items))
         for item in full_items:
             update_spray_list(''.join(item))
             generate_years(''.join(item), year_start, year_end)
@@ -1129,7 +1129,7 @@ def main():
 
     Original Art by Alex Chudnovsky (Unaffiliated)
     Spraygen tool by 3ndG4me
-    Version 1.6
+    Version 1.7
     '''
 
     print(Fore.BLUE + banner + Style.RESET_ALL)
