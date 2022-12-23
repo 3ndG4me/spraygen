@@ -510,7 +510,7 @@ def generate_nba(year_start, year_end):
     bar.finish()
 
 def generate_mlb(year_start, year_end):
-    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating nfl list", suffix='%(percent)d%%', max=len(mlb_teams))
+    bar = Bar(Fore.BLUE + "[*] Info: " + Style.RESET_ALL + "Generating mlb list", suffix='%(percent)d%%', max=len(mlb_teams))
     for team in mlb_teams:
         # Add base word to list
         update_spray_list(team)
